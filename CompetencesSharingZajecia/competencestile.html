@@ -10,7 +10,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="js/angular.js"></script>
     <script src="js/competences.js"></script>
-    <script src="js/hello.js"></script>
+    <script src="js/tile.js"></script>
 
     <style>
         .competence-level-low{
@@ -24,11 +24,16 @@
             flex-wrap: wrap;
             justify-content: center;
         }
+        .card{
+            border: 0px;
+        }
+        tile{
+            border: 1px solid rgba(0,0,0,.125);
+        }
     </style>
 </head>
 <body ng-app="appCompetencies" ng-controller="listController">
-    <hello firstlastname="Krzysztof Rytlewski" competence="competencies[7]"></hello>
-    <form name="searchForm">
+    <form class="flex-wrap" name="searchForm">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">Podaj nazwę kompetencji</span>
@@ -38,19 +43,11 @@
                 <button class="btn btn-outline-secondary" type="button" ng-disabled="searchForm.$invalid" ng-click="searchCompetence()">Szukaj</button>
             </div>
         </div>
+        <tile competence="competence" ng-repeat="competence in competencies| filter: {Name: competenceSearchText}| orderBy:'-Name'" ng-if="competence.Level > 0"> </tile>
     </form>
     <div class="flex-wrap">
         <div class="card" style="width: 12rem;" ng-repeat="competence in competencies| filter: {Name: competenceSearchText}| orderBy:'-Name'" ng-if="competence.Level > 0">
-            <h4 class="card-title text-center">{{$index + 1}}. {{competence.Name | lowercase| uppercase}}</h4>
-            <div class="card-body">
-                <img class="card-img-top" ng-src="{{'assets/' +  competence.Picture}}">
-                <h6 class="card-title font-weight-bold" 
-                    ng-class="{'competence-level-low': competence.Level < 3, 
-                                'competence-level-high': competence.Level > 3}">
-                    Poziom: {{competence.Level| asText:false}}
-                </h6>
-                <p class="card-text" ng-if="competence.Description">Opis: {{competence.Description}}</p>
-            </div>
+            
         </div>
     </div>
 
@@ -59,7 +56,7 @@
 </body>
 <script>
     var app = angular.module("appCompetencies", []);
-    app.component('hello', cHello);
+    app.component('tile', cHello);
     app.filter('asText', function(){
         return function(input, reverseScale){
             if(reverseScale){ //dla true
