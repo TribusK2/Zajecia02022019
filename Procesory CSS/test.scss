@@ -1,0 +1,4 @@
+$dark-color: rgb(22, 235, 164);
+div.dark{
+    background-color: lighten($dark-color,30);
+}
